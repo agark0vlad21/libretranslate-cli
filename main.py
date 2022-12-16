@@ -7,13 +7,20 @@ parser.add_argument("-s", "--source", type=str, default="auto", help="source tex
 parser.add_argument("-t", "--target", type=str, help="target language", required=True)
 args = parser.parse_args()
 
+from requests import get, post
 import readline
-from requests import post
+
+if args.target not in str(get("https://libretranslate.org/languages").json()):
+    print("invalid target language")
+    exit(1)
+elif args.source not in str(get("https://libretranslate.org/languages").json()):
+    print("invalid source language")
+    exit(2)
 
 while True:
     try:
         print(post("https://libretranslate.org/translate", json={
-    "q": input("type text here: "),
+    "q": input(": "),
     "source": args.source,
     "target": args.target,
     "format": "text",
@@ -22,6 +29,6 @@ while True:
     "Content-Type": "application/json"}).json()["translatedText"])
     except KeyboardInterrupt:
         print("\nBye!")
-        exit(1)
+        exit(3)
     except KeyError:
         print("can't get translation")
