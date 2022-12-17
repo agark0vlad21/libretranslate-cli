@@ -10,10 +10,12 @@ args = parser.parse_args()
 from requests import get, post
 import readline
 
-if args.target not in str(get("https://libretranslate.org/languages").json()):
+languages = str(get("https://libretranslate.org/languages").json())
+
+if args.target not in languages or len(args.target) != 2:
     print("invalid target language")
     exit(1)
-elif args.source not in str(get("https://libretranslate.org/languages").json()):
+elif args.source not in languages or len(args.source) != 2:
     print("invalid source language")
     exit(2)
 
@@ -27,7 +29,7 @@ while True:
     "api_key": ""
 }, headers={
     "Content-Type": "application/json"}).json()["translatedText"])
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, EOFError):
         print("\nBye!")
         exit(3)
     except KeyError:
