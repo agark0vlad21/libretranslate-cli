@@ -12,10 +12,10 @@ import readline
 
 languages = str(get("https://libretranslate.org/languages").json())
 
-if args.target not in languages or len(args.target) != 2:
+if args.target.lower() not in languages or len(args.target) != 2:
     print("invalid target language")
     exit(1)
-elif args.source not in languages or len(args.source) != 2:
+elif args.source.lower() not in languages or len(args.source) != 2:
     print("invalid source language")
     exit(2)
 
@@ -23,8 +23,8 @@ while True:
     try:
         print(post("https://libretranslate.org/translate", json={
     "q": input(": "),
-    "source": args.source,
-    "target": args.target,
+    "source": args.source.lower(),
+    "target": args.target.lower(),
     "format": "text",
     "api_key": ""
 }, headers={
